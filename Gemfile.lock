@@ -74,8 +74,13 @@ GEM
       xpath (~> 3.2)
     childprocess (4.1.0)
     concurrent-ruby (1.1.9)
+    connection_pool (2.2.5)
     crass (1.0.6)
     diff-lcs (1.5.0)
+    dotenv (2.7.6)
+    dotenv-rails (2.7.6)
+      dotenv (= 2.7.6)
+      railties (>= 3.2)
     erubi (1.10.0)
     ffi (1.15.4)
     globalid (1.0.0)
@@ -108,6 +113,8 @@ GEM
       nio4r (~> 2.0)
     racc (1.6.0)
     rack (2.2.3)
+    rack-protection (2.1.0)
+      rack
     rack-proxy (0.7.0)
       rack
     rack-test (1.1.0)
@@ -142,6 +149,7 @@ GEM
     rb-fsevent (0.11.0)
     rb-inotify (0.10.1)
       ffi (~> 1.0)
+    redis (3.3.5)
     regexp_parser (2.2.0)
     rexml (3.2.5)
     rspec-core (3.10.1)
@@ -178,6 +186,13 @@ GEM
       rubyzip (>= 1.2.2)
     shoulda-matchers (5.1.0)
       activesupport (>= 5.2.0)
+    sidekiq (4.2.10)
+      concurrent-ruby (~> 1.0)
+      connection_pool (~> 2.2, >= 2.2.0)
+      rack-protection (>= 1.5.0)
+      redis (~> 3.2, >= 3.2.1)
+    simple_enum (2.3.2)
+      activesupport (>= 4.0.0)
     spring (2.1.1)
     spring-watcher-listen (2.0.1)
       listen (>= 2.7, < 4.0)
@@ -224,15 +239,19 @@ DEPENDENCIES
   bootsnap (>= 1.4.2)
   byebug
   capybara (>= 2.15)
+  dotenv-rails
   jbuilder (~> 2.7)
   listen (~> 3.2)
   pg
   puma (~> 4.1)
   rails (~> 6.0.4, >= 6.0.4.1)
+  redis
   rspec-rails (~> 5.0.0)
   sass-rails (>= 6)
   selenium-webdriver
   shoulda-matchers
+  sidekiq (~> 4.1, >= 4.1.2)
+  simple_enum
   spring
   spring-watcher-listen (~> 2.0.0)
   turbolinks (~> 5)
