@@ -42,3 +42,4 @@ yarn-debug.log*
 .gems/*
 .cache/*
 .bash_history
+.irb_history

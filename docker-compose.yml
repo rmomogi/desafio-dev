@@ -15,6 +15,8 @@ services:
     command: "rails c"
     depends_on:
       - postgres
+    networks:
+      - desafio-dev-net
 
   postgres:
     image: postgres:9.3
