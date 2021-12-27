@@ -1,0 +1,15 @@
+current directory: /desafio-dev/.gems/ruby/3.0.0/gems/bindex-0.8.1/ext/skiptrace
+/usr/local/bin/ruby -I /usr/local/lib/ruby/3.0.0 -r ./siteconf20211227-1-a59vo5.rb extconf.rb
+creating Makefile
+
+current directory: /desafio-dev/.gems/ruby/3.0.0/gems/bindex-0.8.1/ext/skiptrace
+make DESTDIR\= clean
+
+current directory: /desafio-dev/.gems/ruby/3.0.0/gems/bindex-0.8.1/ext/skiptrace
+make DESTDIR\=
+compiling cruby.c
+linking shared-object skiptrace/internal/cruby.so
+
+current directory: /desafio-dev/.gems/ruby/3.0.0/gems/bindex-0.8.1/ext/skiptrace
+make DESTDIR\= install
+/usr/bin/install -c -m 0755 cruby.so ./.gem.20211227-1-memyzo/skiptrace/internal

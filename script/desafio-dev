@@ -1,0 +1,100 @@
+#!/bin/bash -e
+
+COMMAND_NAME=$1
+COMMAND_ARGS=${@:2}
+
+run() {
+  environment=$1
+  shift
+
+  docker-compose run --rm -e RAILS_ENV=$environment "app" $@
+}
+
+case $COMMAND_NAME in
+  setup)
+    echo -e '\e[34mBuiling your project images... \e[0m'
+    docker-compose build --build-arg uid=$EUID
+
+    echo -e '\e[34mInstalling gems... \e[0m'
+    $0 bundle install
+
+    echo -e '\e[34mPreparing your dev environment... \e[0m'
+    run "development" bundle exec rails db:drop
+    run "development" bundle exec rails db:setup
+
+    echo -e '\e[34mPreparing your test environment... \e[0m'
+    run "test" bundle exec rails db:drop
+    run "test" bundle exec rails db:setup
+
+    echo -e '\e[32mDone! \e[0m'
+    ;;
+  run)
+    run "development" $COMMAND_ARGS
+    ;;
+  rake)
+    $0 run bundle exec rake $COMMAND_ARGS
+    ;;
+  bash)
+    $0 run /bin/bash
+    ;;
+  rspec)
+    run "test" bundle exec rspec $COMMAND_ARGS
+    ;;
+  rubocop)
+    $0 run bundle exec rubocop $COMMAND_ARGS
+    ;;
+  rubycritic)
+    $0 run bundle exec rubycritic app $COMMAND_ARGS
+    ;;
+  audit)
+    $0 run bundle exec bundle-audit
+    ;;
+  outdated)
+    $0 run bundle outdated
+    ;;
+  console)
+    $0 run bundle exec irb -r ./config/bootstrap.rb
+    ;;
+  bundle)
+    $0 run bundle $COMMAND_ARGS
+    ;;
+  stop)
+    docker-compose stop
+    ;;
+  exec)
+    docker exec -it $( docker ps | grep -m 1 desafio-dev | awk '{ print $1 }' ) $COMMAND_ARGS
+    ;;
+  start)
+    docker-compose up
+    ;;
+  release-sysint)
+    git tag force-staging-$(date +%Y-%m-%d-%H%M%S) && \
+      git push origin --tags
+    ;;
+  *)
+    echo -e '\e[34mThis is your CLI to interact with desafio-dev!!!\e[0m'
+    echo
+    echo 'Usage: desafio-dev <option> <arguments>'
+    echo 'Examples:'
+    echo 'desafio-dev bundle install'
+    echo 'desafio-dev rspec'
+    echo 'desafio-dev rake -T'
+    echo
+    echo 'Available options:'
+    echo -e '\e[33m bash:\e[0m accesses a interative bash console inside container'
+    echo -e '\e[33m bundle:\e[0m accesses bundler gem commands'
+    echo -e '\e[33m console:\e[0m accesses the project irb console'
+    echo -e '\e[33m exec:\e[0m issues a command inside a running desafio-dev container'
+    echo -e '\e[33m rake:\e[0m runs rake tasks'
+    echo -e '\e[33m rspec:\e[0m runs the test suite'
+    echo -e '\e[33m rubocop:\e[0m runs the static code analyzer'
+    echo -e '\e[33m rubycritic:\e[0m runs the code quality reporter'
+    echo -e '\e[33m audit:\e[0m check for security vulnerabilities in gems'
+    echo -e '\e[33m outdated:\e[0m check for outdated gems'
+    echo -e '\e[33m release-sysint:\e[0m used to create a new sysint release'
+    echo -e '\e[33m run:\e[0m used to run alternative commands'
+    echo -e '\e[33m setup:\e[0m sets up both dev and test environments'
+    echo -e '\e[33m start:\e[0m starts application for great and good'
+    echo -e '\e[33m stop:\e[0m stops all containers'
+    ;;
+esac

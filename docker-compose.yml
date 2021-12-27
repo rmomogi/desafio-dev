@@ -1,0 +1,32 @@
+version: '3.6'
+
+services:
+  app:
+    build:
+      context: .
+      args:
+        app_path: /desafio-dev
+    container_name: desafio-dev
+    env_file: .env
+    volumes:
+      - .:/desafio-dev
+    ports:
+      - "3000:8080"
+    command: "rails c"
+    depends_on:
+      - postgres
+
+  postgres:
+    image: postgres:9.3
+    container_name: desafio-dev-db
+    ports:
+      - "5432:5432"
+    volumes:
+      - ~/.docker-volumes/desafio-dev/db/:/var/lib/postgresql/data
+    networks:
+      - desafio-dev-net
+
+networks:
+  desafio-dev-net:
+    driver: bridge
+    name: desafio-dev-net
