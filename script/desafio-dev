@@ -20,11 +20,13 @@ case $COMMAND_NAME in
 
     echo -e '\e[34mPreparing your dev environment... \e[0m'
     run "development" bundle exec rails db:drop
-    run "development" bundle exec rails db:setup
+    run "development" bundle exec rails db:create
+    run "development" bundle exec rails db:migrate
 
     echo -e '\e[34mPreparing your test environment... \e[0m'
     run "test" bundle exec rails db:drop
-    run "test" bundle exec rails db:setup
+    run "test" bundle exec rails db:create
+    run "test" bundle exec rails db:migrate
 
     echo -e '\e[32mDone! \e[0m'
     ;;
