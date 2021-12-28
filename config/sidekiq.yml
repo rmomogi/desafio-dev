@@ -3,5 +3,5 @@
 :verbose: false
 :concurrency: 10
 :queues:
-  - [open, 3]
-  - [low, 1]
+  - high
+  - low
